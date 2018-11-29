@@ -1,0 +1,47 @@
+﻿@model StoreApp.Models.ViewModel.DisplayVM
+@{
+    ViewBag.Title = "Catelog";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                @foreach (var i in Model.Categories)
+                {
+                    @Html.ActionLink(i.CategoryName, "Catelog", "Product", new { id = i.CategoryID }, new { @class = "list-group-item" });
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        @*<div class="card" style="width: 18rem;">
+                <img class="card-img-top" src=".../100px180/?text=Image cap" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>*@
+        @foreach (var i in Model.Products)
+        {
+            <figure style="width: auto;display:inline-block;margin-right:30px;margin-bottom:30px;border:2px solid lightgray;padding:10px">
+                <img src="@Url.Action("GetImage","Product",new {fileName=i.ProductImage })" width="270" />
+                <figcaption>
+                    <h5>@i.ModelName</h5>
+                    <p>商品編號：@i.ModelNumber</p>
+                    <p>單價：@i.UnitCost.ToString()</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                    <a href="~/Product/AddtoCart/@i.ProductID" class="btn btn-danger">Add to Cart</a>
+                </figcaption>
+            </figure>
+        }
+    </div>
+</div>
+
+@section script{
+    <script>
+        $(document).ready(function ()
+        {
+            $("a[href='" + location.pathname + "']").addClass("active");
+        });
+    </script>
+}
