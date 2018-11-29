@@ -15,10 +15,10 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(p => p.ModelNumber)</th>
-            <th>@Html.DisplayNameFor(p => p.ModelName)</th>
-            <th>@Html.DisplayNameFor(p => p.UnitCost)</th>
-            <th>@Html.DisplayNameFor(p => p.ProductImage)</th>
+            <th>@Html.ActionLink(@Html.DisplayNameFor(p => p.First().ModelNumber).ToString(), "Index",new {sortBy = ViewBag.sortProductName })</th>
+            <th>@Html.DisplayNameFor(p => p.First().ModelName)</th>
+            <th>@Html.ActionLink(@Html.DisplayNameFor(p => p.First().UnitCost).ToString(), "Index", new { sortBy = ViewBag.sortUnitPrice })</th>
+            <th>@Html.DisplayNameFor(p => p.First().ProductImage)</th>
         </tr>
     </thead>
     <tbody>
@@ -32,5 +32,8 @@
             </tr>
         }
     </tbody>
+
+    @Html.PagedListPager(Model,page => Url.Action("Index", new {page, sortBy = Request["sortBy"]}), PagedListRenderOptions.ClassicPlusFirstAndLast)
+
 </table>
 

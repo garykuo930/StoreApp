@@ -16,9 +16,28 @@ namespace StoreApp.Controllers
         private storeEntities db = new storeEntities();
 
         // GET: Product
-        public ActionResult Index(int page=1)
+        public ActionResult Index(int? page,string sortBy)
         {
-            return View(db.Products.ToList().ToPagedList(page,3));
+            ViewBag.sortProductName = string.IsNullOrEmpty(sortBy) ? "ProductNameDesc" : "";
+            ViewBag.sortUnitPrice = sortBy == "UnitPrice" ? "UnitPriceDesc" : "UnitPrice";
+            var products = db.Products.AsQueryable();
+            switch (sortBy)
+            {
+                case "ProductNameDesc":
+                    products = products.OrderByDescending(p => p.ModelNumber);
+                    break;
+                case "UnitPrice":
+                    products = products.OrderBy(p => p.UnitCost);
+                    break;
+                case "UnitPriceDesc":
+                    products = products.OrderByDescending(p => p.UnitCost);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ModelNumber);
+                    break;
+            }
+
+            return View(products.ToList().ToPagedList(page ?? 1,3));
         }
 
         public ActionResult GetImage(string fileName)
